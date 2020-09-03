@@ -32,7 +32,7 @@
                     </template>
                 </van-field>
                 <div style="margin: 16px;">
-                    <van-button round color="linear-gradient(to right, #ff6034, #ee0a24)" size="large" @click="logOut">
+                    <van-button round color="linear-gradient(to right, #ff6034, #ee0a24)" size="large" @click="onSubmit">
                         登录 & 注册
                     </van-button>
                 </div>

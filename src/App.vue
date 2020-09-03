@@ -1,3 +1,4 @@
+<title>魔音-隐私聊天室</title>
 <template>
   <div id="app">
     <transition :name="transitionName">
