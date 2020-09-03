@@ -7,7 +7,7 @@
 
         </van-row>
         <div class="box" style="margin-top: 5.8rem">
-            <van-form @submit="onSubmit" style="width: 80%">
+            <van-form style="width: 80%">
                 <van-field
                         v-model="username"
                         name="username"
