@@ -52,17 +52,14 @@
                     this.is_online = res.data.is_online
                     this.online_count = res.data.online_count
                     if (res.data.is_online === false){
+                        var that = this
                         this.WS.setWs(new WebSocket(baseConfig.wsServer));
                         this.WS.ws.onmessage = function(msg) {
-                            console.log(msg)
+                            // console.log(msg)
                             var serverData = JSON.parse(msg.data)
                             if (serverData.type == 'init'){
-                                this.client_id = serverData.client_id
-                                bindSocket({client_id:this.client_id}).then(res => {
-                                    if (res.code != 200){
-                                        Toast.fail('服务器连接错误.请重试');
-                                    }
-                                })
+                                that.client_id = serverData.client_id
+                                that.myBindSocket()
                             }
                         }
                     }
@@ -79,8 +76,15 @@
                         this.$router.push('/chat')
                     }
                 })
+            },
+            myBindSocket() {
+                bindSocket({client_id:this.client_id}).then(res => {
+                    this.online_count = res.data.online_count
+                    if (res.code != 200){
+                        Toast.fail('服务器连接错误.请重试');
+                    }
+                })
             }
-
         }
     }
 </script>

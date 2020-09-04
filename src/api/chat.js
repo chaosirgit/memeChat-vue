@@ -22,3 +22,11 @@ export function outRoom() {
         method : 'post',
     })
 }
+
+export function sendMsg(data) {
+    return request({
+        url: 'sendMsg',
+        method : 'post',
+        data
+    })
+}

@@ -7,51 +7,75 @@
                 @click-left="onOutRoom"
         />
         <div class="chatView">
-            <van-row type="flex" class="mb-10">
-                <van-col span='4'>
-                    <van-image
-                        class="avator"
-                        src="https://img.yzcdn.cn/vant/cat.jpeg"
-                    />
-                </van-col>
-                <van-col span="14" class="overflow-l  relative">
-                    <span class="triangle-l"></span>
-                    <div class="bg-gray ft-12 pd-5">这是一段最多显示一行的文字，多余的内容会被省略1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx8</div>
-                </van-col>
-            </van-row>
-            <van-row type="flex" class="mb-10">
-                <van-col span='4' >
-                    <van-image
-                        class="avator"
-                        src="https://img.yzcdn.cn/vant/cat.jpeg"
-                    />
-                </van-col>
-                <van-col span="14" class="overflow-l relative">
-                    <span class="triangle-l"></span>
-                    <div class="bg-gray ft-12 pd-5">这是一段最多显示一行的文字，多余的内容会被省略1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx8</div>
-                </van-col>
-            </van-row>
-            <van-row type="flex" class="mb-10" justify="end">
-                <van-col span="14" class="overflow-l relative">
-                    <span class="triangle-r"></span>
-                    <div class="bg-green ft-12 pd-5 color-fff">这是一段最多显示一行的文字，多余的内容会被省略1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx8</div>
-                </van-col>
-                <van-col span='4'>
-                    <van-image
-                        class="avator"
-                        src="https://img.yzcdn.cn/vant/cat.jpeg"
-                    />
-                </van-col>
-            </van-row>
-            <van-row type="flex" justify="center">
-                <van-col span="20" class="color-red ft-12">fanfan离开了房间</van-col>
-            </van-row>
+            <div v-for="(chat, index ) in chatList" :key="index" >
+                <van-row type="flex" class="mb-10"  v-if="chat.is_self == 0">
+                    <van-col span='4' class="relative">
+                        <van-image
+                                class="avator"
+                                src="https://img.yzcdn.cn/vant/cat.jpeg"
+                        />
+                        <span class="triangle-l"></span>
+                    </van-col>
+                    <van-col span="14" class="overflow-l ml-5">
+                        <div class="bg-gray ft-12 pd-5">{{chat.msg}}</div>
+                    </van-col>
+                </van-row>
+
+                <van-row type="flex" class="mb-10" justify="end" v-if="chat.is_self == 1">
+                    <van-col span="14" class="overflow-l mr-5">
+                        <div class="bg-green ft-12 pd-5 color-fff">{{chat.msg}}</div>
+                    </van-col>
+                    <van-col span='4' class="relative" >
+                        <van-image
+                                class="avator"
+                                src="https://img.yzcdn.cn/vant/cat.jpeg"
+                        />
+                        <span class="triangle-r"></span>
+                    </van-col>
+                </van-row>
+
+                <van-row type="flex" justify="center" v-if="chat.is_self == 2">
+                    <van-col span="20" class="color-red ft-12">{{chat.msg}}</van-col>
+                </van-row>
+            </div>
+
+            <!--<van-row type="flex" class="mb-10">-->
+                <!--<van-col span='4' class="relative" >-->
+                    <!--<van-image-->
+                        <!--class="avator"-->
+                        <!--src="https://img.yzcdn.cn/vant/cat.jpeg"-->
+                    <!--/>-->
+                    <!--<span class="triangle-l"></span>-->
+                <!--</van-col>-->
+                <!--<van-col span="14" class="overflow-l ml-5">-->
+                    <!--<div class="bg-gray ft-12 pd-5">这是一段最多显示一行的文字，多余的内容会被省略1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx8</div>-->
+                <!--</van-col>-->
+            <!--</van-row>-->
+
+            <!--<van-row type="flex" class="mb-10" justify="end">-->
+                <!--<van-col span="14" class="overflow-l mr-5">-->
+                    <!--<div class="bg-green ft-12 pd-5 color-fff">这是一段最多显示一行的文字，多余的内容会被省略1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx8</div>-->
+                <!--</van-col>-->
+                <!--<van-col span='4' class="relative" >-->
+                    <!--<van-image-->
+                            <!--class="avator"-->
+                            <!--src="https://img.yzcdn.cn/vant/cat.jpeg"-->
+                    <!--/>-->
+                    <!--<span class="triangle-r"></span>-->
+                <!--</van-col>-->
+            <!--</van-row>-->
+
+
+
+
+
+
         </div>
         <div class="mySendContent">
             <van-cell-group>
-                <van-field v-model="content"  placeholder="请输入发送内容" >
+                <van-field v-model="content"  placeholder="请输入发送内容" @keyup.enter.native="sendMsg">
                     <template #button>
-                        <van-button size="small" type="primary">发送</van-button>
+                        <van-button size="small" type="primary" @click="sendMsg" >发送</van-button>
                     </template>
                 </van-field>
                 
@@ -60,14 +84,15 @@
     </div>
 </template>
 <script>
-    import {roomInfo , outRoom} from '../../api/chat'
+    import {roomInfo , outRoom, sendMsg} from '../../api/chat'
 
     export default {
         data() {
             return {
                 title:'',
                 group_count: 0,
-                content: ''
+                content: '',
+                chatList: []
             }
         },
         computed: {
@@ -82,11 +107,30 @@
                     this.group_count = res.data.group_count
                     this.title = res.data.user_room.room.name + ' 号房间('+this.group_count+')'
                 })
+                const that = this
+                this.WS.ws.onmessage = function(msg) {
+                    // console.log(msg)
+                    var serverData = JSON.parse(msg.data)
+                    if (serverData.type == 'message'){
+                        console.log(serverData)
+                        that.chatList.push(serverData);
+                    }
+                }
             },
             onOutRoom() {
                 outRoom().then(res => {
                     if (res.code === 200){
                         this.$router.push('/main')
+                    }
+                })
+            },
+            sendMsg() {
+                if (this.content == ''){
+                    return false
+                }
+                sendMsg({msg:this.content}).then(res => {
+                    if (res.code === 200){
+                        this.content = ''
                     }
                 })
             }
@@ -97,7 +141,7 @@
     .mySendContent {
         margin-top: -50px;
         height: 50px;
-        position:absolute;
+        position:fixed;
         bottom:0;
         left: 0;
         width: 100%;
@@ -106,7 +150,6 @@
         border-top: 1px solid #eee;
     }
     .chatView {
-        padding-top: 10px;
         padding-bottom: 50px;
         height: 100%;
         overflow-y: scroll;
@@ -136,22 +179,22 @@
         position: absolute;
         width: 0;
         height: 0;
-        border-top: 6px solid transparent;
-        border-bottom: 3px solid transparent;
-        border-right: 7px solid #eee;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        border-right: 5px solid #eee;
         top:20px;
-        left: -5px;
+        left: 53px;
         z-index: 999;
     }
     .triangle-r{
         position: absolute;
         width: 0;
         height: 0;
-        border-top: 6px solid transparent;
-        border-bottom: 3px solid transparent;
-        border-left: 6px solid #07c160;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        border-left: 5px solid #07c160;
         top:20px;
-        right: -5px;
+        right: 54px;
         z-index: 999;
     }
     .relative{
