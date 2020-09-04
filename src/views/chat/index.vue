@@ -8,39 +8,39 @@
         />
         <div class="chatView">
             <van-row type="flex" class="mb-10">
-                <van-col span='4' class="relative">
+                <van-col span='4'>
                     <van-image
                         class="avator"
                         src="https://img.yzcdn.cn/vant/cat.jpeg"
                     />
-                    <span class="triangle-l"></span>
                 </van-col>
-                <van-col span="14" class="overflow-l ml-5">
+                <van-col span="14" class="overflow-l  relative">
+                    <span class="triangle-l"></span>
                     <div class="bg-gray ft-12 pd-5">这是一段最多显示一行的文字，多余的内容会被省略1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx8</div>
                 </van-col>
             </van-row>
             <van-row type="flex" class="mb-10">
-                <van-col span='4' class="relative" >
+                <van-col span='4' >
                     <van-image
                         class="avator"
                         src="https://img.yzcdn.cn/vant/cat.jpeg"
                     />
-                    <span class="triangle-l"></span>
                 </van-col>
-                <van-col span="14" class="overflow-l ml-5">
+                <van-col span="14" class="overflow-l relative">
+                    <span class="triangle-l"></span>
                     <div class="bg-gray ft-12 pd-5">这是一段最多显示一行的文字，多余的内容会被省略1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx8</div>
                 </van-col>
             </van-row>
             <van-row type="flex" class="mb-10" justify="end">
-                <van-col span="14" class="overflow-l mr-5">
+                <van-col span="14" class="overflow-l relative">
+                    <span class="triangle-r"></span>
                     <div class="bg-green ft-12 pd-5 color-fff">这是一段最多显示一行的文字，多余的内容会被省略1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx8</div>
                 </van-col>
-                <van-col span='4' class="relative" >
+                <van-col span='4'>
                     <van-image
                         class="avator"
                         src="https://img.yzcdn.cn/vant/cat.jpeg"
                     />
-                    <span class="triangle-r"></span>
                 </van-col>
             </van-row>
             <van-row type="flex" justify="center">
@@ -106,6 +106,7 @@
         border-top: 1px solid #eee;
     }
     .chatView {
+        padding-top: 10px;
         padding-bottom: 50px;
         height: 100%;
         overflow-y: scroll;
@@ -135,22 +136,22 @@
         position: absolute;
         width: 0;
         height: 0;
-        border-top: 5px solid transparent;
-        border-bottom: 5px solid transparent;
-        border-right: 5px solid #eee;
+        border-top: 6px solid transparent;
+        border-bottom: 3px solid transparent;
+        border-right: 7px solid #eee;
         top:20px;
-        left: 53px;
+        left: -5px;
         z-index: 999;
     }
     .triangle-r{
         position: absolute;
         width: 0;
         height: 0;
-        border-top: 5px solid transparent;
-        border-bottom: 5px solid transparent;
-        border-left: 5px solid #07c160;
+        border-top: 6px solid transparent;
+        border-bottom: 3px solid transparent;
+        border-left: 6px solid #07c160;
         top:20px;
-        right: 54px;
+        right: -5px;
         z-index: 999;
     }
     .relative{
