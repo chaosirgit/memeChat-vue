@@ -12,29 +12,32 @@
                     <van-col span='4' class="relative">
                         <van-image
                                 class="avator"
-                                src="https://img.yzcdn.cn/vant/cat.jpeg"
+                                :src="chat.user.avatar"
                         />
                         <span class="triangle-l"></span>
                     </van-col>
                     <van-col span="14" class="overflow-l ml-5">
-                        <div class="bg-gray ft-12 pd-5">{{chat.msg}}</div>
+                        <div :class="genderColor(chat.user.gender)">{{chat.user.username}}</div>
+                        <div class="bg-gray ft-12 pd-5" style="border-radius: 5px;">{{chat.msg}}</div>
                     </van-col>
                 </van-row>
 
                 <van-row type="flex" class="mb-10" justify="end" v-if="chat.is_self == 1">
                     <van-col span="14" class="overflow-l mr-5">
-                        <div class="bg-green ft-12 pd-5 color-fff">{{chat.msg}}</div>
+                        <div :class="genderColor(chat.user.gender)">{{chat.user.username}}</div>
+                        <div class="bg-green ft-12 pd-5 color-fff" style="border-radius: 5px;">{{chat.msg}}</div>
                     </van-col>
                     <van-col span='4' class="relative" >
                         <van-image
                                 class="avator"
-                                src="https://img.yzcdn.cn/vant/cat.jpeg"
+                                :src="chat.user.avatar"
                         />
                         <span class="triangle-r"></span>
                     </van-col>
                 </van-row>
 
                 <van-row type="flex" justify="center" v-if="chat.is_self == 2">
+
                     <van-col span="20" class="color-red ft-12">{{chat.msg}}</van-col>
                 </van-row>
             </div>
@@ -133,6 +136,13 @@
                         this.content = ''
                     }
                 })
+            },
+            genderColor(gender){
+                if (gender == 0){
+                    return 'female';
+                } else {
+                    return 'male';
+                }
             }
         }
     }
@@ -235,6 +245,14 @@
         font-size: 12px;
     }
     .pd-5{
+        padding: 5px;
+    }
+    .female{
+        color: pink;
+        padding: 5px;
+    }
+    .male {
+        color: blue;
         padding: 5px;
     }
 </style>

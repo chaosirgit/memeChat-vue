@@ -60,7 +60,7 @@ export default {
   mounted() {},
   methods: {
     onSubmit() {
-      login({ username: this.username, password: this.password }).then(res => {
+      login({ username: this.username, password: this.password, gender:this.radio }).then(res => {
         if (res.code === 200) {
           this.$router.push("/");
         }
