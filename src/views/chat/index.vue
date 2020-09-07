@@ -6,7 +6,7 @@
                 left-arrow
                 @click-left="onOutRoom"
         />
-        <div class="chatView">
+        <div class="chatView" id="chatView">
             <div v-for="(chat, index ) in chatList" :key="index" >
                 <van-row type="flex" class="mb-10"  v-if="chat.is_self == 0">
                     <van-col span='4' class="relative">
@@ -81,10 +81,11 @@
                         <van-button size="small" type="primary" @click="sendMsg" >发送</van-button>
                     </template>
                 </van-field>
-                
+
             </van-cell-group>
         </div>
     </div>
+
 </template>
 <script>
     import {roomInfo , outRoom, sendMsg} from '../../api/chat'
@@ -103,6 +104,22 @@
         },
         mounted() {
             this.chat()
+        },
+        watch: {
+          chatList() {
+              // this.$nextTick(() => {
+              //
+              //     let list = document.getElementById('chatView')
+              //     list.scrollTop = list.scrollHeight
+              // })
+              var scrollingElement = document.getElementById('chatView');
+
+              console.log(document.getElementById('chatView').scrollHeight);
+              // document.getElementById('chatView').scrollTop = document.getElementById('chatView').scrollHeight
+              window.scrollTo(0,(scrollingElement.scrollHeight));
+             
+            
+          }
         },
         methods: {
             chat() {
