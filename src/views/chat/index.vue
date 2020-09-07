@@ -93,14 +93,17 @@
     export default {
         data() {
             return {
-                title:'',
-                group_count: 0,
+                roomName:'',
+                groupCount: 0,
                 content: '',
-                chatList: []
+                chatList: [],
             }
         },
         computed: {
             //计算数据
+            title() {
+                return this.roomName + ' 号房间('+this.groupCount+')'
+            }
         },
         mounted() {
             this.chat()
@@ -117,15 +120,13 @@
               console.log(document.getElementById('chatView').scrollHeight);
               // document.getElementById('chatView').scrollTop = document.getElementById('chatView').scrollHeight
               window.scrollTo(0,(scrollingElement.scrollHeight));
-             
-            
           }
         },
         methods: {
             chat() {
                 roomInfo().then(res => {
-                    this.group_count = res.data.group_count
-                    this.title = res.data.user_room.room.name + ' 号房间('+this.group_count+')'
+                    this.groupCount = res.data.group_count
+                    this.roomName = res.data.user_room.room.name
                 })
                 const that = this
                 this.WS.ws.onmessage = function(msg) {
@@ -133,6 +134,8 @@
                     var serverData = JSON.parse(msg.data)
                     if (serverData.type == 'message'){
                         console.log(serverData)
+                        // that.title = serverData.group_count
+                        that.groupCount = serverData.group_count
                         that.chatList.push(serverData);
                     }
                 }
